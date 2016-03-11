@@ -19,6 +19,9 @@ class Sliding < Piece
       movex, movey = el
       position = [movex + x, movey + y]
 
+      if self.is_a?(Queen) && position == [2, 6]
+        debugger
+      end
       while inbounds?(position) && valid_move?(position)
         possible_moves << position
         x, y = position

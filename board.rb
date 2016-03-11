@@ -58,7 +58,6 @@ class Board
     raise ArgumentError unless possible_moves.include?(end_pos)
 
     end_row, end_col = end_pos
-    debugger
     if moved_into_check?(moving_piece, end_pos)
       puts "Cannot move into check."
       sleep(1)
@@ -104,7 +103,6 @@ class Board
     moved_piece.pos = end_pos
 
     @grid[xstart][ystart] = nil
-    p @grid[xstart][ystart]
   end
 
 # pass in current_player color

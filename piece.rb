@@ -1,7 +1,7 @@
 class Piece
 
   attr_accessor :pos
-  attr_reader :color
+  attr_reader :color, :grid
 
   def initialize(color, grid, pos)
     @color = color
