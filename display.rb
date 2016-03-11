@@ -1,3 +1,4 @@
+
 require "colorize"
 require_relative "cursorable"
 
@@ -51,6 +52,7 @@ class Display
     until result
       render
       puts "#{color}'s move"
+      puts @board.message if @board.message
       result = get_input
     end
 

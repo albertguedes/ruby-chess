@@ -9,18 +9,19 @@ require_relative 'knight'
 require_relative 'king'
 require_relative 'queen'
 
+require 'byebug'
 
 class Board
 
-  attr_accessor :grid
+  attr_accessor :grid, :message
 
-  def initialize
+  def initialize(populate = true)
     @grid = Array.new(8) {Array.new(8)}
-    populate_grid
+    @message = nil
+    populate_grid if populate
   end
 
   def populate_grid
-    # 0.upto(8) do |i|
     @grid.each_index do |i|
       if i == 0 || i == 7
         @grid[0][i] = Rook.new(:black, @grid, [0,i])
@@ -46,6 +47,7 @@ class Board
   end
 
   def move(start, end_pos, color)
+    @message = nil
     start_row, start_col = start
     moving_piece = @grid[start_row][start_col]
     if moving_piece.nil? || moving_piece.color != color
@@ -56,15 +58,76 @@ class Board
     raise ArgumentError unless possible_moves.include?(end_pos)
 
     end_row, end_col = end_pos
+    debugger
+    if moved_into_check?(moving_piece, end_pos)
+      puts "Cannot move into check."
+      sleep(1)
+     raise ArgumentError.new
+   end
+
     @grid[end_row][end_col] = moving_piece
+
     moving_piece.pos = end_pos
     @grid[start_row][start_col] = nil
+    if check?(moving_piece.opposite_color)
+      @message = "#{moving_piece.opposite_color} is in check!"
+      sleep(2)
+    end
+  end
+
+  def moved_into_check?(moving_piece, end_pos)
+    dup_board = self.dup
+    dup_board.move!(moving_piece.pos, end_pos)
+    dup_board.check?(moving_piece.color)
+  end
+
+  def dup
+    dup_board = Board.new(false)
+    @grid.each_index do |row|
+      @grid[row].each_with_index do |piece, col|
+        if piece.nil?
+          dup_board.grid[row][col] = nil
+        else
+          dup_board.grid[row][col] = piece.dup
+        end
+      end
+    end
+    dup_board
+  end
+
+  def move!(start_pos, end_pos)
+    xstart, ystart = start_pos
+    xend, yend = end_pos
+
+    moved_piece = @grid[xstart][ystart]
+    @grid[xend][yend] = moved_piece
+    moved_piece.pos = end_pos
+
+    @grid[xstart][ystart] = nil
+    p @grid[xstart][ystart]
+  end
+
+# pass in current_player color
+  def check?(color)
+    opposing_pieces = []
+    king_piece = nil
+    @grid.each do |row|
+      row.each do |piece|
+        if piece
+          king_piece = piece if piece.is_a?(King) && piece.color == color
+          opposing_pieces << piece if piece.color != color
+        end
+      end
+    end
+    opposing_pieces.each do |piece|
+      return true if piece.possible_moves.include?(king_piece.pos)
+    end
+    false
   end
 
   def in_bounds?(move)
     x, y = move
-    return true if x.between?(0, 7) && y.between?(0, 7)
-    false
+    x.between?(0, 7) && y.between?(0, 7)
   end
 
 end

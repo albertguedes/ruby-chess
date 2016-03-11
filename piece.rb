@@ -1,4 +1,3 @@
-
 class Piece
 
   attr_accessor :pos
@@ -10,25 +9,26 @@ class Piece
     @pos = pos
   end
 
-  def present?
+  def opposite_color
+    @color == :black ? :white : :black
+  end
+
+  def present? # TODO revisit method
     true
   end
 
   def valid_move?(move)
     x, y = move
-    return true if @grid[x][y] == nil
-    return false if @grid[x][y].color == @color
+    return false if @grid[x][y] && @grid[x][y].color == @color
     true
   end
 
   def kills?(position)
-    x,y = position
+    x, y = position
 
-    if @grid[x][y]
-      return true if @grid[x][y].color != @color
-    end
+    return true if @grid[x][y] && @grid[x][y].color != @color
+
     false
-
   end
 
   def inbounds?(move)
@@ -37,8 +37,23 @@ class Piece
     false
   end
 
-  def change_position(move)
-    @pos = move
+  def dup
+    piece_class = self.class
+
+    if piece_class == Pawn
+      duped = Pawn.new(@color, @grid, @pos)
+    elsif piece_class == Rook
+      duped = Rook.new(@color, @grid, @pos)
+    elsif piece_class == Bishop
+      duped = Bishop.new(@color, @grid, @pos)
+    elsif piece_class == Knight
+      duped = Knight.new(@color, @grid, @pos)
+    elsif piece_class == Queen
+      duped = Queen.new(@color, @grid, @pos)
+    elsif piece_class == King
+      duped = King.new(@color, @grid, @pos)
+    end
+    duped
   end
 
 end
