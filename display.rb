@@ -40,7 +40,7 @@ class Display
 
     piece = @board.grid[i][j]
     if piece
-      color = piece.color == :white ? :yellow : :blue
+      color = piece.color == :white ? :light_yellow : :cyan
     end
 
     { background: bg, color: color }
