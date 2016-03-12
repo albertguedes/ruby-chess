@@ -16,10 +16,9 @@ class Pawn < Piece
       start_row = true if row == 1
     end
     move_arr << [row + adj, col] unless kills?([row + adj, col])
-    move_arr << [row + (2*adj), col] if start_row && !kills?([row + (2*adj), col])
+    move_arr << [row + (2 * adj), col] if start_row && !kills?([row + (2 * adj), col])
 
     move_arr += diagonals(row, col)
-
     move_arr.select { |move| inbounds?(move) && valid_move?(move) }
   end
 

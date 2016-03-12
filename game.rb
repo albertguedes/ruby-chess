@@ -11,9 +11,12 @@ class Game
     @current_player = :white
   end
 
+  def over?
+    @board.over?
+  end
+
   def play
-    puts "Beginning of game. White moves first."
-    while true
+    until over?
       begin
         pos_1 = @display.get_move(@current_player)
         pos_2 = @display.get_move(@current_player)
@@ -26,6 +29,7 @@ class Game
 
       @current_player = @current_player == :white ? :black : :white
     end
+    puts @board.message
   end
 
 end

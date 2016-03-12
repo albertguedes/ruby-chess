@@ -18,6 +18,7 @@ class Board
   def initialize(populate = true)
     @grid = Array.new(8) {Array.new(8)}
     @message = nil
+    @over = false
     populate_grid if populate
   end
 
@@ -47,11 +48,17 @@ class Board
   end
 
   def move(start, end_pos, color)
-    @message = nil
     start_row, start_col = start
     moving_piece = @grid[start_row][start_col]
+
     if moving_piece.nil? || moving_piece.color != color
       raise ArgumentError
+    end
+
+    if check?(moving_piece.color)
+      @message = "#{moving_piece.color} is in check!"
+    elsif check?(moving_piece.opposite_color)
+      @message = "#{moving_piece.opposite_color} is in check!"
     end
 
     possible_moves = moving_piece.possible_moves
@@ -62,15 +69,15 @@ class Board
       puts "Cannot move into check."
       sleep(1)
      raise ArgumentError.new
-   end
+    end
 
-    @grid[end_row][end_col] = moving_piece
+    move!(start, end_pos)
 
-    moving_piece.pos = end_pos
-    @grid[start_row][start_col] = nil
     if check?(moving_piece.opposite_color)
       @message = "#{moving_piece.opposite_color} is in check!"
-      sleep(2)
+      if checkmate?(moving_piece.opposite_color)
+        @message = "#{moving_piece.opposite_color} is in checkmate! Game over."
+      end
     end
   end
 
@@ -87,7 +94,7 @@ class Board
         if piece.nil?
           dup_board.grid[row][col] = nil
         else
-          dup_board.grid[row][col] = piece.dup
+          dup_board.grid[row][col] = piece.dup(dup_board.grid)
         end
       end
     end
@@ -120,12 +127,34 @@ class Board
     opposing_pieces.each do |piece|
       return true if piece.possible_moves.include?(king_piece.pos)
     end
+    @message = nil
     false
+  end
+
+  def checkmate?(color)
+    return false unless check?(color)
+
+    @grid.each do |row|
+      row.each do |piece|
+        if piece && piece.color == color
+          piece.possible_moves.each do |move|
+            return false if !moved_into_check?(piece, move)
+          end
+        end
+      end
+    end
+    @over = true
+    true
   end
 
   def in_bounds?(move)
     x, y = move
     x.between?(0, 7) && y.between?(0, 7)
   end
+
+  def over?
+    @over
+  end
+
 
 end

@@ -37,21 +37,21 @@ class Piece
     false
   end
 
-  def dup
+  def dup(grid)
     piece_class = self.class
 
     if piece_class == Pawn
-      duped = Pawn.new(@color, @grid, @pos)
+      duped = Pawn.new(@color, grid, @pos)
     elsif piece_class == Rook
-      duped = Rook.new(@color, @grid, @pos)
+      duped = Rook.new(@color, grid, @pos)
     elsif piece_class == Bishop
-      duped = Bishop.new(@color, @grid, @pos)
+      duped = Bishop.new(@color, grid, @pos)
     elsif piece_class == Knight
-      duped = Knight.new(@color, @grid, @pos)
+      duped = Knight.new(@color, grid, @pos)
     elsif piece_class == Queen
-      duped = Queen.new(@color, @grid, @pos)
+      duped = Queen.new(@color, grid, @pos)
     elsif piece_class == King
-      duped = King.new(@color, @grid, @pos)
+      duped = King.new(@color, grid, @pos)
     end
     duped
   end

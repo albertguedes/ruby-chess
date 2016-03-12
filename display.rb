@@ -43,8 +43,11 @@ class Display
   def render
     system("clear")
     puts "Arrow keys or WASD to move, space or enter to confirm."
+    puts ""
 
-    build_grid.each { |row| puts row.join }
+    build_grid.each_with_index { |row, idx| puts "#{8 - idx} #{row.join}" }
+    puts "   a  b  c  d  e  f  g  h "
+    puts ""
   end
 
   def get_move(color)
