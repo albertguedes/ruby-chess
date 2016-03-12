@@ -7,11 +7,7 @@ class Rook < Sliding
   end
 
   def to_s
-    if @color == :white 
-      " ♖ "
-    else
-      " ♜ "
-    end
+    " ♜ "
   end
 
 end
