@@ -13,10 +13,6 @@ class Piece
     @color == :black ? :white : :black
   end
 
-  def present? # TODO revisit method
-    true
-  end
-
   def valid_move?(move)
     x, y = move
     return false if @grid[x][y] && @grid[x][y].color == @color

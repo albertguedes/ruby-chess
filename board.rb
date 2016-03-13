@@ -47,6 +47,15 @@ class Board
     end
   end
 
+  def king_castling_moves(piece)
+    castling_moves = []
+    piece.castling.each do |castling_move|
+      castling_moves << castling_move[0]
+    end
+
+    castling_moves
+  end
+
   def move(start, end_pos, color)
     start_row, start_col = start
     moving_piece = @grid[start_row][start_col]
@@ -62,6 +71,11 @@ class Board
     end
 
     possible_moves = moving_piece.possible_moves
+
+    if moving_piece.is_a?(King) && !check?(moving_piece.color) && moving_piece.castling.length > 0
+      possible_moves += king_castling_moves(moving_piece)
+    end
+
     raise ArgumentError unless possible_moves.include?(end_pos)
 
     end_row, end_col = end_pos
@@ -69,6 +83,17 @@ class Board
       puts "Cannot move into check."
       sleep(1)
      raise ArgumentError.new
+    end
+
+    if moving_piece.is_a?(King) && king_castling_moves(moving_piece).include?(end_pos)
+      moving_piece.castling.each do |castling_move|
+        if castling_move[0] == end_pos
+          rook_start = castling_move[1]
+          rook_end = castling_move[2]
+          move!(rook_start, rook_end)
+          break
+        end
+      end
     end
 
     move!(start, end_pos)
@@ -79,6 +104,13 @@ class Board
         @message = "#{moving_piece.opposite_color} is in checkmate! Game over."
       end
     end
+
+    if moving_piece.is_a?(Pawn) && moving_piece.promotion?
+      @grid[row][col] = Queen.new(moving_piece.color, @grid, moving_piece.pos)
+    elsif moving_piece.is_a?(Rook) || moving_piece.is_a?(King)
+      moving_piece.castleable = false if moving_piece.castleable
+    end
+
   end
 
   def moved_into_check?(moving_piece, end_pos)

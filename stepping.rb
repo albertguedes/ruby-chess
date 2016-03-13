@@ -5,7 +5,7 @@ class Stepping < Piece
   def possible_moves(type)
     moves_arr = []
     row, col = @pos
-    if type == :king # TODO refractor to King and Knight classes
+    if type == :king
       positions = [[-1,-1], [-1,0], [-1,1], [0,1], [0,-1], [1,-1], [1,0], [1,1]]
     else
       positions = [[1,2], [1,-2], [-1,2], [-1,-2], [2,1], [2,-1], [-2,1], [-2,-1]]

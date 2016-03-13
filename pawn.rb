@@ -42,6 +42,13 @@ class Pawn < Piece
     diag_moves
   end
 
+  def promotion?
+    return true if @color == :white && @pos[0] == 0
+    return true if @color == :black && @pos[0] == 7
+    false
+  end
+
+
   def to_s
     " ♟ "
   end
