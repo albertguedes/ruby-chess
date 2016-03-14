@@ -25,3 +25,11 @@ Use arrow keys or WASD to move the cursor. Use enter or spacebar to select a pie
 
 ### Checkmate
 ![fools_mate](http://res.cloudinary.com/catalyst/image/upload/v1457944442/checkmate_vz1ebg.png)
+
+
+## Future Features (TBD)
+* En passant, draw
+* Option to turn chessboard around for each player's turn
+* Option to undo last move
+* Show captured pieces
+* Store famous chess games as sequence of moves; allow play-through
