@@ -6,6 +6,13 @@ To play, clone the repo and type "ruby game.rb" into your terminal.
 
 Use arrow keys or WASD to move the cursor. Use enter or spacebar to select a piece. The selected piece will be highlighted in green. Use enter or spacebar to select the destination of the piece.
 
+## Features
+* All chesspieces inherit from a Piece class
+  * Queen, Rook, and Bishop inherit from Sliding class
+  * King, Knight, and Pawn inherit from Stepping class
+* Error handling for improper moves
+* Deep dup of chessboard and pieces to perform move validations without chainging game state
+
 ## Screenshots
 
 #### Start
